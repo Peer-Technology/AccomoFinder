@@ -1,0 +1,13 @@
+{% extends "base.html" %} {% load bootstrap4 %} {% block title %}Registration {% endblock title %} {% block content %} {% if form.errors %} {% endif %}
+<div class="col-md-12 bg-light">
+    <hr/>
+    <hr/><br/>
+    <div class="col-md-6 bg-light" style="font-size:x-small" >
+    <form action="" method="post" class="form container form-group-sm" style="font-size:x-small">
+        {% csrf_token %} {% bootstrap_form form %} {% buttons %}
+        <button type="submit" class="btn btn-primary">Submit</button> {% endbuttons %}
+    </form>
+    <hr/>
+</div>
+</div>
+{% endblock content %}

@@ -1,0 +1,20 @@
+{% extends "base.html" %} {% block title %} {% load bootstrap4 %}Pay Booking{% endblock title %} {% block content %} {% load static %}
+<div class="container bg-light">
+    <!-- <canvas></canvas> -->
+    <hr/>
+    <hr/>
+    <hr/>
+    <hr/>
+    <div class="container">
+        <form method="post" action="{% url 'rental:pay_booking' %}">
+            {% csrf_token%} 
+            {% bootstrap_form form %} 
+            <!-- <input type="search" placeholder="search" name="address" id="id_address" aria-label="search"/> -->
+            <input type="submit" value="Submit" />
+        </form>
+        <hr/>
+    </div>
+</div>
+
+
+<hr> {% endblock content %}

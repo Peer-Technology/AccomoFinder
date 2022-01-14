@@ -1,0 +1,121 @@
+{% extends "base.html" %} {% block title %}Rental Listings{% endblock title %} {% block content %} {% load static %}
+<div class="container bg-light">
+    <!-- <canvas></canvas> -->
+    <hr/>
+    <hr/>
+    <hr/>
+    <hr/>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#map" type="button" role="tab" aria-controls="map" aria-selected="true">map</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="table-tab" data-bs-toggle="tab" data-bs-target="#table" type="button" role="tab" aria-controls="table" aria-selected="false">table</button>
+        </li>
+
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="map" role="tabpanel" aria-labelledby="map-tab">
+            <hr/>
+            <div class="col-md-12" height="100">
+                <form method="post" action="{% url 'rental:search' %}">
+                    {% csrf_token%} {{form}}
+                    <!-- <input type="search" placeholder="search" name="address" id="id_address" aria-label="search"/> -->
+                    <input type="submit" value="Submit" />
+                </form>
+                {{m|safe}}
+            </div>
+        </div>
+        <div class="tab-pane fade" id="table" role="tabpanel" aria-labelledby="table-tab">
+            <hr/> {% if rental_places %}
+            <div class="container">
+                <div class="row">
+                    {% for rental in rental_places%}
+                    <div class="card col-md-4">
+                        <table class="table">
+                            <tr>
+                                <td colspan="2"> <img class="card-img-top" src="{% static 'iauth/content/img/hmfl.png' %}" style="width:50%;height:50%;" alt="Card image cap">
+                                </td>
+                                <td colspan="10" style="font-size:x-small">
+                                    <p class="">Max Rooms: <i class="text-success">{{rental.max_rooms}}</i></p>
+                                    <p class="">Available Rooms: <i class="text-success">{{rental.available_rooms}}</i></p>
+                                </td>
+                            </tr>
+                        </table>
+                        <div class="card-body">
+                            <table class="table">
+                                <tbody style="font-size:x-small">
+                                    <tr>
+                                        <td>
+                                            Type
+                                        </td>
+                                        <td>
+                                            {{rental.type_of_listing}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Details
+                                        </td>
+                                        <td>
+                                            {{rental.description}}
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Price
+                                        </td>
+                                        <td>
+                                            ${{rental.price_per_room }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            Address
+                                        </td>
+                                        <td>
+                                            No: {{rental.house_number }} - {{rental.address }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            City
+                                        </td>
+                                        <td>
+                                            {{rental.city }}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="container">
+                            <!-- <small class="text-muted">{{rental.added_on}}</small> -->
+                            <!-- <hr/> -->
+                            <div class="row" style>
+                                <button class="btn btn-info btn-sm col-md-4" style="font-size:x-small">View Details</button>
+                                <form method="post" action="{% url 'rental:place_booking' %}">
+                                    {% csrf_token%}
+                                     <input name="number_of_rooms" placeholder="Number Of Rooms" required="true" type="number" id="id_number_of_rooms" value=""/>
+
+                                     <input hidden name="listing" type="number" required="" id="id_listing" value="{{rental.id }}"/>
+                                     <input hidden name="user_id" type="number" required="" id="id_user_id" value="{{request.user.id }}" />
+                                    
+                                    <input class="btn btn-info btn-sm col-md-4" style="font-size:x-small" type="submit" value="Book" />
+                                </form>
+                                
+                                <button class="btn btn-info btn-sm col-md-4" style="font-size:x-small">Contact Owner</button>
+                            </div>
+                            <hr/>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <br/> {% endif %}
+        </div>
+    </div>
+</div>
+
+
+<hr> {% endblock content %}

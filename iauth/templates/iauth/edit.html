@@ -1,0 +1,21 @@
+{% extends "base.html" %} {% load bootstrap4 %} {% block title %}Edit{% endblock title %} {% block content %}
+<canvas>
+
+</canvas>
+<div class="container bg-light">
+    <div class="col-md-6">
+        <form action="" method="post" class="form">
+            {% csrf_token %} 
+                {% if system_groups %}
+                   You Are Affiliating to the  {{system_groups}}'s group.
+                    <input hidden class="form-control" name="my_grp" id="id_my_grp" value="{{system_groups.name}}"/>
+                {% endif %}
+            {% bootstrap_form form %} 
+            {% buttons %}
+
+            <button type="submit" class="btn btn-primary">Submit</button> {% endbuttons %}
+        </form>
+<hr/>
+    </div>
+</div>
+{% endblock content %}

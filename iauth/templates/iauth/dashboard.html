@@ -1,0 +1,229 @@
+ <!DOCTYPE html>{% extends "base.html" %} {% block title %}Dashboard{% endblock title %} {% block content %}
+<div class="container bg-light">
+    <hr/>
+    <hr/>
+    <hr/>
+    <hr/>
+
+    {% if groups %} 
+    <!-- Welcome : -->
+   {% if groups%}
+    {% for group in groups %}
+     <!-- {{ group.name }}  -->
+     <hr/>
+        {% if group.name == "Agent" or group.name == "Owner"%}
+            <!-- <button onclick="getLocation()">Add this Current Location</button>
+        <p id="demo"></p> -->
+        <a href="{% url 'rental:add_place' %}" class="nav-link">Add Place</a>
+        {% if my_places%}
+            {% for place in my_places%}
+                <div class="card" style="font-size:small">
+                    <div class="card-body">
+                    <table class="table table-info" style="font-size:x-small">
+                        <tr>
+                            <td colspan="1">Details : </td>
+                            <td colspan="2">{{place.description}}</td>
+                            <td colspan="1">Address : </td>
+                            <td colspan="2">{{place.address}}</td>
+                            <td colspan="1">Price : </td>
+                            <td colspan="2">{{place.price_per_room}}</td>
+                            <td colspan="1"><button class="btn btn-sm btn-info" style="font-size:x-small">Edit</button></td>
+                        </tr>
+                    </table>
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                    <p class="card-text"><small class="text-muted"></small></p>
+                    <hr/>                    
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+       {% else %}
+        
+    <div class="container">
+        <button class="btn btn-sm btn-primary" style="font-size:x-small">Look For A place</button>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="Places-tab" data-bs-toggle="tab" data-bs-target="#Places" type="button" role="tab" aria-controls="Places" aria-selected="true">Places</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="Bookings-tab" data-bs-toggle="tab" data-bs-target="#Bookings" type="button" role="tab" aria-controls="Bookings" aria-selected="false">Bookings</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="Payments-tab" data-bs-toggle="tab" data-bs-target="#Payments" type="button" role="tab" aria-controls="Payments" aria-selected="false">Payments</button>
+        </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="Places" role="tabpanel" aria-labelledby="Places-tab">
+            {% for place in rental_places %}
+                <div class="card" style="font-size:small">
+                    <div class="card-body">
+                    <table class="table table-info" style="font-size:x-small">
+                        <tr>
+                            <td colspan="1">Details : </td>
+                            <td colspan="2">{{place.description}}</td>
+                            <td colspan="1">Address : </td>
+                            <td colspan="2">{{place.address}}</td>
+                            <td colspan="1">Price : </td>
+                            <td colspan="2">{{place.price_per_room}}</td>
+                            <td colspan="1">
+                                <!-- place_booking -->
+                                 <form method="post" action="{% url 'rental:place_booking' %}">
+                                    {% csrf_token%}
+                                    <input hidden value="{{place.id}}" id="id_rental" name="rental"/>
+                                    <input class="btn btn-sm btn-info" style="font-size:x-small" type="submit" value="Book" />
+                                </form>
+                                <!-- <button class="btn btn-sm btn-info" style="font-size:x-small">Book</button> -->
+                            </td>
+                        </tr>
+                    </table>
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                    <p class="card-text"><small class="text-muted"></small></p>
+                    <hr/>                    
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="Bookings" role="tabpanel" aria-labelledby="Bookings-tab">
+            {% for place in my_bookings %}
+                <div class="card" style="font-size:small">
+                    <div class="card-body">
+                    <table class="table table-info" style="font-size:x-small">
+                        <tr>
+                            <td colspan="1">Approved : </td>
+                            <td colspan="2">{{place.approved}}</td>
+                            <td colspan="1">Rental Place : </td>
+                            <td colspan="2">{{place.listing}}</td>
+                            <td colspan="1">Number Of Rooms : </td>
+                            <td colspan="2">{{place.number_of_rooms}}</td>
+                            
+                            <td colspan="1">
+                                <form method="post" action="{% url 'rental:pay_booking' %}">
+                                    {% csrf_token%}
+                                    <input hidden value="{{place.listing.id}}" id="id_rental" name="rental"/>
+                                    <input type="submit" value="Pay" />
+                                </form>
+                                <!-- <button class="btn btn-sm btn-info" style="font-size:x-small">Pay</button> -->
+                            </td>
+                        </tr>
+                    </table>
+                    <h5 class="card-title"></h5>
+                    <p class="card-text"></p>
+                    <p class="card-text"><small class="text-muted"></small></p>
+                    <hr/>                    
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <div class="tab-pane fade" id="Payments" role="tabpanel" aria-labelledby="Payments-tab">
+        
+        
+                <div class="card" style="font-size:small">
+                    <div class="card-body">
+                    <table class="table table-info" style="font-size:x-small">
+                        <thead>
+                            <tr>
+                                <th>Booking</th>
+                                <th>Date Of Paymnent </th>
+                                <th>Amount Paid</th>
+                                <th>POP</th>
+                            </tr>
+                        </thead>
+                        {% for place in my_payments %}
+                        <tr>
+                            
+                            <td >{{place.booking}}</td>
+                            <td >{{place.date_of_payment}}</td>
+                            <td >{{place.amount}}</td>
+                            <td >{{place.proof_of_payment_attached}}</td>
+                        </tr>
+                        
+            {% endfor %}
+                    </table>
+                    <hr/>                    
+                    </div>
+                </div>
+        </div>
+        </div>
+    </div>
+    
+        {% endif%}
+    {% endfor %}
+   {% endif %}
+        {% else %}
+        <div class="col-md-10 container ">
+            <hr/>
+            <a href="{% url 'iauth:edit' %}" class="icon-video popup-vimeo d-flex justify-content-center align-items-center mr-3">
+                Update your profile : <span class="fas fa-user"></span>
+            </a>
+            <hr/>
+            <div class="card-deck">
+                {% if system_groups %}
+                 {% for group in system_groups%}
+                     <div class="card" style="font-size:small">
+                        <div class="card-body">
+                        <h5 class="card-title">{{group.name}}</h5>
+                        {% if group.name == "Seeker" %}
+                            <p class="card-text">This profile is for students looking for accomodation </p>
+                            <p class="card-text"><small class="text-muted"></small></p>
+                            <hr/>
+                            <form action="{% url 'iauth:edit' %}" method="GET">
+                                <input hidden  name="profile" value="{{group.name}}" id="id_profile"/>
+                                <input type="submit" class="btn btn-sm btn-primary" style="font-size:x-small" value="I am looking for A Place"/>
+                            </form>
+                        {% endif %}
+                        {% if group.name == "Agent" %}
+                            <p class="card-text">This profile is for Personels or organisations who would want to list Placess on behalf of other property Owner</p>
+                            <p class="card-text"><small class="text-muted"></small></p>
+                            <hr/>
+                            <form action="{% url 'iauth:edit' %}" method="GET">
+                                <input hidden  name="profile" value="{{group.name}}" id="id_profile"/>
+                                <input type="submit" class="btn btn-sm btn-primary" style="font-size:x-small" value="I am an Agent"/>
+                            </form>
+                        {% endif %}
+                        {% if group.name == "Owner" %}
+                            <p class="card-text">This profile if for property owners.</p>
+                            <p class="card-text"><small class="text-muted"></small></p>
+                            <hr/>
+
+                           <form action="{% url 'iauth:edit' %}" method="GET">
+                                <input hidden  name="profile" value="{{group.name}}" id="id_profile"/>
+                                <input type="submit" class="btn btn-sm btn-primary" style="font-size:x-small" value="I am Property Owner"/>
+                            </form>
+
+                        {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+        </div>
+    {% endif %}
+   <hr> 
+</div>
+
+<script>
+var x = document.getElementById("demo");
+
+function getLocation() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else { 
+    x.innerHTML = "Geolocation is not supported by this browser.";
+  }
+}
+
+function showPosition(position) {
+  x.innerHTML = "Latitude: " + position.coords.latitude + 
+  "<br>Longitude: " + position.coords.longitude;
+}
+</script>
+ {% endblock content %}
+
+
+<html>
+<body>
+
+</body>
+</html>

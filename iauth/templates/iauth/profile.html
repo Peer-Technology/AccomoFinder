@@ -1,0 +1,107 @@
+{% extends "base.html" %} {% block title %}location{% endblock title %} {% block content %}{% load bootstrap4 %}
+<script>
+$(document).ready(function() {
+        var user_id = JSON.parse(document.getElementById('user_id').textContent);
+        // alert(user_id)
+        $('#id_user_id').val(user_id);
+        $('#id_user').val(user_id);
+        
+        getLocation();
+
+        // var rand = Math.random().toString().substr(2, 8);
+        // var d = new Date().getTime();
+        // var n = d.toString();
+        // setInterval(ajaxCall, 1000); //300000 MS == 5 minutes
+
+        // function ajaxCall() {
+        //     //do your AJAX stuff here
+        // }
+        // setInterval(() => {
+
+        // }, 1000);
+    });
+</script>
+     {{ user.id|json_script:"user_id" }} 
+<canvas></canvas>
+
+<!-- <input id="id_user_id"/> -->
+<div class="container bg-light">
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <button class="nav-link " id="groups-tab" data-bs-toggle="tab" data-bs-target="#groups" type="button" role="tab" aria-controls="groups" aria-selected="true">groups</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active"  id="location-tab" data-bs-toggle="tab" data-bs-target="#location" type="button" role="tab" aria-controls="location" aria-selected="false">location</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="interests-tab" data-bs-toggle="tab" data-bs-target="#interests" type="button" role="tab" aria-controls="interests" aria-selected="false">interests</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade" id="groups" role="tabpanel" aria-labelledby="groups-tab">
+       <p>Your groups are listed below</p>
+
+    <hr/>
+       {% if groups %} 
+    <!-- Welcome : -->
+    {% for group in groups %}
+    {{group}}
+{% endfor%}
+{% endif %}
+    <hr/>
+  </div>
+  <div class="tab-pane fade  show active"  id="location" role="tabpanel" aria-labelledby="location-tab">
+    <div class="container">
+        <table class="table">
+            <tr>
+                <td>
+                    City : {{prof.city}}
+                </td>
+                <td>Nearby University : {{prof.nearby_institute}}</td>
+            </tr>
+        </table>
+    </div>   
+    <p>Update your Current Location</p>
+          <form action="" method="post" class="form">
+            {% csrf_token %} 
+               
+            {% bootstrap_form profile_form %} 
+
+            {% buttons %}
+
+            <button type="submit" class="btn btn-primary">Submit</button> {% endbuttons %}
+        </form>
+    <div hidden class="row no-gutters slider-text js-fullheight align-items-center justify-content-end" data-scrollax-parent="true" style="height: 730px;">
+        <div class="col-md-12 ftco-animate mt-5 fadeInUp ftco-animated" data-scrollax=" properties: { translateY: &#39;70%&#39; }" style="transform: translateZ(0px) translateY(36.6685%);">
+            <h1 class="mb-4" data-scrollax="properties: { translateY: &#39;30%&#39;, opacity: 1.6 }" style="opacity: 0.9; transform: translateZ(0px) translateY(15.7151%);">location
+            </h1>
+            <p class="mb-4" data-scrollax="properties: { translateY: &#39;30%&#39;, opacity: 1.6 }" style="opacity: 0.75; transform: translateZ(0px) translateY(15.7151%);">{{welcome}}</p>
+            <p class="d-flex align-items-center">
+                <!-- <a href="{% url 'iauth:edit' %}" class="btn btn-primary">Edit Your location</a> or
+                <a href="{% url 'iauth:password_change' %}" class="btn btn-warning">Change your password</a> -->
+                <a href="{% url 'iauth:password_change' %}" class="icon-video popup-vimeo d-flex justify-content-center align-items-center mr-3">
+                    <span class="fas fa-lock"></span>
+                </a>
+                <span class="watch">Change Password</span>
+                <!-- <a href="{% url 'iauth:edit' %}" class="icon-video popup-vimeo d-flex justify-content-center align-items-center mr-3">
+                    <span class="fas fa-user"></span>
+                </a>
+                <span class="watch">Edit location</span> -->
+            </p>
+        </div>
+    </div>
+    <hr/>
+    <hr/>
+  </div>
+  <div class="tab-pane fade" id="interests" role="tabpanel" aria-labelledby="interests-tab">
+      <hr/>
+    <hr/>
+  </div>
+</div>
+   
+</div>
+
+<hr> 
+
+
+{% endblock content %}

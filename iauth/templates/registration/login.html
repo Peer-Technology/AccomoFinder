@@ -1,0 +1,48 @@
+{% extends "base.html" %} {% load bootstrap4 %} {% block title %}Login{% endblock title %} {% block content %} {% if request.user.is_authenticated %}
+
+<div class="container">
+    <div class="row no-gutters slider-text js-fullheight align-items-center justify-content-end" data-scrollax-parent="true" style="height: 730px;">
+        <div class="col-md-12 ftco-animate mt-5 fadeInUp ftco-animated" data-scrollax=" properties: { translateY: &#39;70%&#39; }" style="transform: translateZ(0px) translateY(36.6685%);">
+            <h1 class="mb-4" data-scrollax="properties: { translateY: &#39;30%&#39;, opacity: 1.6 }" style="opacity: 0.9; transform: translateZ(0px) translateY(15.7151%);">Profile
+            </h1>
+            <p class="mb-4" data-scrollax="properties: { translateY: &#39;30%&#39;, opacity: 1.6 }" style="opacity: 0.75; transform: translateZ(0px) translateY(15.7151%);">You are logged In!!</p>
+            <p class="d-flex align-items-center">
+                <!-- <a href="{% url 'iauth:edit' %}" class="btn btn-primary">Edit Your Profile</a> or
+                <a href="{% url 'iauth:password_change' %}" class="btn btn-warning">Change your password</a> -->
+                <a href="{% url 'iauth:password_change' %}" class="icon-video popup-vimeo d-flex justify-content-center align-items-center mr-3">
+                    <span class="fas fa-lock"></span>
+                </a>
+                <span class="watch">Change Password</span>
+                <a href="{% url 'iauth:edit' %}" class="icon-video popup-vimeo d-flex justify-content-center align-items-center mr-3">
+                    <span class="fas fa-user"></span>
+                </a>
+                <span class="watch">Edit Profile</span>
+            </p>
+        </div>
+    </div>
+</div>
+{% else %}
+<div class="col-md-6">
+    <div style="text-align: center;">
+        <h1>Log-in</h1>
+        {% if form.errors %}
+        <p>
+            Your username and password didn't match.Please Please try again.
+        </p>
+        {% else %}
+        <p>Please, use the following form to log-in</p>
+        {% endif %}
+    </div>
+</div>
+<div class="col-md-4 bg-light" style="font-size:x-small" >
+    <br/>
+     <form action="" method="post" class="form col-md-12">
+        {% csrf_token %} {% bootstrap_form form %} {% buttons %}
+        <input type="hidden" name="next" value="{{ next }}" />
+        <button type="submit" class="btn btn-primary">Submit</button> {% endbuttons %} <p><a href="{% url 'iauth:password_reset' %}">Forgotten your password?</a></p>
+    </form>
+    
+       
+    <hr/>
+</div>
+{% endif %} {% endblock content %}
